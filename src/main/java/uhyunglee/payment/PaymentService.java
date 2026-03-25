@@ -23,12 +23,13 @@ public class PaymentService {
         ObjectMapper mapper = new ObjectMapper();
         ExchangedRateData data = mapper.readValue(response, ExchangedRateData.class);
         BigDecimal exchangeRate = data.rates().get("KRW");
-        System.out.println(exchangeRate);
 
         // calculate amount
+        BigDecimal convertedAmount = foreignCurrencyAmount.multiply(exchangeRate);
+        LocalDateTime validUntil = LocalDateTime.now().plusMinutes(30);
 
         // calculate valid time
-        return new Payment(orderId, currency, foreignCurrencyAmount, BigDecimal.ZERO, BigDecimal.ZERO, LocalDateTime.now());
+        return new Payment(orderId, currency, foreignCurrencyAmount, exchangeRate, convertedAmount, validUntil);
     }
 
     public static void main(String[] args) throws IOException {
