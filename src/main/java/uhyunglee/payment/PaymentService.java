@@ -24,7 +24,6 @@ public class PaymentService {
         ExchangedRateData data = mapper.readValue(response, ExchangedRateData.class);
         BigDecimal exchangeRate = data.rates().get("KRW");
 
-        // calculate amount
         BigDecimal convertedAmount = foreignCurrencyAmount.multiply(exchangeRate);
         LocalDateTime validUntil = LocalDateTime.now().plusMinutes(30);
 
