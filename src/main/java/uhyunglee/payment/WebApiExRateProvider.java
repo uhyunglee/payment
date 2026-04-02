@@ -10,9 +10,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.stream.Collectors;
 
-public class WebApiExRatePaymentService extends PaymentService{
-    @Override
-    BigDecimal getExchangeRate(String currency) throws IOException {
+public class WebApiExRateProvider {
+    BigDecimal getWebExchangeRate(String currency) throws IOException {
         URL url = new URL("https://open.er-api.com/v6/latest/" + currency);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -21,8 +20,7 @@ public class WebApiExRatePaymentService extends PaymentService{
 
         ObjectMapper mapper = new ObjectMapper();
         ExchangedRateData data = mapper.readValue(response, ExchangedRateData.class);
-        BigDecimal exchangeRate = data.rates().get("KRW");
 
-        return exchangeRate;
+        return data.rates().get("KRW");
     }
 }
